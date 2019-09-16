@@ -39,6 +39,7 @@ class DoublyLinkedList:
     self.head = node
     self.tail = node
     self.length = 1 if node is not None else 0
+    self.highestNodeValue = None
 
   def __len__(self):
     return self.length
@@ -48,7 +49,12 @@ class DoublyLinkedList:
   the old head node's previous pointer accordingly."""
   def add_to_head(self, value):
     new_node = ListNode(value)
-    self.length += 1 
+    self.length += 1
+
+    if self.highestNodeValue is None:
+      self.highestNodeValue = new_node
+    elif self.highestNodeValue.value < new_node.value:
+      self.highestNodeValue = new_node
 
     if not self.head and not self.tail:
       self.head = new_node
@@ -65,6 +71,24 @@ class DoublyLinkedList:
     value = self.head.value
     self.delete(self.head)
     return value
+    if self.highestNodeValue == self.head:
+
+      value = self.head.value
+      self.delete(self.head)
+
+      self.highestNodeValue = None
+      currentNode = self.head
+      while currentNode:
+        if self.highestNodeValue is None:
+          self.highestNodeValue = currentNode
+        elif self.highestNodeValue.value < currentNode.value:
+          self.highestNodeValue = currentNode
+        currentNode = currentNode.next
+    else:
+      value = self.head.value
+      self.delete(self.head)
+
+    return value
 
   """Wraps the given value in a ListNode and inserts it 
   as the new tail of the list. Don't forget to handle 
@@ -72,6 +96,11 @@ class DoublyLinkedList:
   def add_to_tail(self, value):
     new_node = ListNode(value)
     self.length += 1
+
+    if self.highestNodeValue is None:
+      self.highestNodeValue = new_node
+    elif self.highestNodeValue.value < new_node.value:
+      self.highestNodeValue = new_node
 
     if not self.head and not self.tail:
       self.head = new_node
@@ -85,9 +114,26 @@ class DoublyLinkedList:
   current tail's previous node the new tail of the List.
   Returns the value of the removed Node."""
   def remove_from_tail(self):
-    value = self.tail.value
-    self.delete(self.tail)
+
+    
+    if self.highestNodeValue == self.tail:
+
+      value = self.tail.value
+      self.delete(self.tail)
+
+      self.highestNodeValue = None
+      currentNode = self.head
+      while currentNode:
+        if self.highestNodeValue is None:
+          self.highestNodeValue = currentNode
+        elif self.highestNodeValue.value < currentNode.value:
+          self.highestNodeValue = currentNode
+        currentNode = currentNode.next
+    else:
+      value = self.tail.value
+      self.delete(self.tail)
     return value
+
 
   """Removes the input node from its current spot in the 
   List and inserts it as the new head node of the List."""
@@ -136,5 +182,5 @@ class DoublyLinkedList:
       node.delete
     
   """Returns the highest value currently in the list"""
-  def get_max(self):
-    pass
+  # def get_max(self):
+  #   return self.highestNodeValue.value
