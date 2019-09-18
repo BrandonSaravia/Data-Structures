@@ -51,11 +51,6 @@ class DoublyLinkedList:
     new_node = ListNode(value)
     self.length += 1
 
-    if self.highestNodeValue is None:
-      self.highestNodeValue = new_node
-    elif self.highestNodeValue.value < new_node.value:
-      self.highestNodeValue = new_node
-
     if not self.head and not self.tail:
       self.head = new_node
       self.tail = new_node
@@ -71,24 +66,6 @@ class DoublyLinkedList:
     value = self.head.value
     self.delete(self.head)
     return value
-    if self.highestNodeValue == self.head:
-
-      value = self.head.value
-      self.delete(self.head)
-
-      self.highestNodeValue = None
-      currentNode = self.head
-      while currentNode:
-        if self.highestNodeValue is None:
-          self.highestNodeValue = currentNode
-        elif self.highestNodeValue.value < currentNode.value:
-          self.highestNodeValue = currentNode
-        currentNode = currentNode.next
-    else:
-      value = self.head.value
-      self.delete(self.head)
-
-    return value
 
   """Wraps the given value in a ListNode and inserts it 
   as the new tail of the list. Don't forget to handle 
@@ -96,11 +73,6 @@ class DoublyLinkedList:
   def add_to_tail(self, value):
     new_node = ListNode(value)
     self.length += 1
-
-    if self.highestNodeValue is None:
-      self.highestNodeValue = new_node
-    elif self.highestNodeValue.value < new_node.value:
-      self.highestNodeValue = new_node
 
     if not self.head and not self.tail:
       self.head = new_node
@@ -115,23 +87,8 @@ class DoublyLinkedList:
   Returns the value of the removed Node."""
   def remove_from_tail(self):
 
-    
-    if self.highestNodeValue == self.tail:
-
-      value = self.tail.value
-      self.delete(self.tail)
-
-      self.highestNodeValue = None
-      currentNode = self.head
-      while currentNode:
-        if self.highestNodeValue is None:
-          self.highestNodeValue = currentNode
-        elif self.highestNodeValue.value < currentNode.value:
-          self.highestNodeValue = currentNode
-        currentNode = currentNode.next
-    else:
-      value = self.tail.value
-      self.delete(self.tail)
+    value = self.tail.value
+    self.delete(self.tail)
     return value
 
 

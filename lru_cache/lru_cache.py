@@ -1,4 +1,5 @@
 from doubly_linked_list import DoublyLinkedList
+from doubly_linked_list import ListNode
 
 class LRUCache:
   """
@@ -12,6 +13,7 @@ class LRUCache:
     self.storage = DoublyLinkedList()
     self.limit = limit
     self.cache = {}
+    self.size = 0
 
   """
   Retrieves the value associated with the given key. Also
@@ -21,10 +23,11 @@ class LRUCache:
   key-value pair doesn't exist in the cache. 
   """
   def get(self, key):
-    self.storage.move_to_front(self.cache[key])
-    node = self.storage.remove_from_head()
-    self.storage.add_to_head(node)
-    return node[key].value
+    if key in self.cache:
+      node = self.cache[key]
+      self.storage.move_to_front(node)
+      return node.value[1]
+    return None
 
 
   """
@@ -38,13 +41,19 @@ class LRUCache:
   the newly-specified value. 
   """
   def set(self, key, value):
-    
-    node = self.get(key)
-    if node is not None:
-      self.storage.remove_from_head()
-    node = self.storage.add_to_head({key: value})
-    self.cache[key] = node
-    self.limit += 1
-    if self.limit > 10:
-      self.storage.remove_from_tail()
 
+    if key in self.cache:
+
+      node = self.cache[key]
+      node.value = (key, value)
+
+      self.storage.move_to_front(node)
+      return
+    
+    if self.size == self.limit:
+      del self.cache[self.storage.tail.value[0]]
+      self.storage.remove_from_tail()
+      self.size -= 1
+    self.storage.add_to_head((key,value))
+    self.cache[key] = self.storage.head
+    self.size += 1
